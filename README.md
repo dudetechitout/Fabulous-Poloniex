@@ -17,7 +17,7 @@ Once you have it installed. Go to your [lending page](https://poloniex.com/lendi
 
 # Better Content
 
-Let me deliever you better content by dropping me a few tokens of appreciation.
+Let me deliver you better content by dropping me a few tokens of appreciation.
 
 BTC Addy: 18rQ5HzSwaFKvR54CCNhgq7eUDyN84X4Lu
 
