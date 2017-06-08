@@ -1,6 +1,6 @@
 # Fabulous-Poloniex
 
-Fabulous Poloniex is a script giving you the ability to see the total amount of BTC gained on active loans in real time.
+Fabulous Poloniex is a script giving you the ability to see the total amount of each token (BTC, DASH, LTC, etc.) gained on active loans in real time.
 
 
 ## Getting started

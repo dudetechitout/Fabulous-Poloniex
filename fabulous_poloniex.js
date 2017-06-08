@@ -22,22 +22,46 @@ if(typeof jQuery === 'undefined'|| !jQuery){
 
 (function(){
     var recal_ = false;
+    var hash = undefined;
     var codeToExecute = function(){
-        var y = ($(".valuePositive").clone().children().remove().end().text().split("0.0"));
-       
+        var y = ($(".valuePositive").clone().children().remove().end().text().replace(/(\d+\.\d{8})/g, '$1,').split(','));
+        var x = ($(".feeCurrency").clone().children().remove().end().text().split(' '));
+        recal_ = (hash === ($(".activeLoans .date").clone().children().remove().end().text()));
+        y.pop();
+        x.shift();
+        
         var i;
-        var z = parseFloat("0.0" + y[1]);
-        for (i = 2; i < y.length; ++i) {
-            z += parseFloat("0.0" + y[i]);
+        var z = {};
+        for (i = y.length - 1; i >= 0; i--) {
+            if(typeof z[x[i]] === 'undefined')
+                z[x[i]] = 0;
+            
+            z[x[i]] += parseFloat(y[i]);
         }
         
-        var t_amount = z.toFixed(8) + " BTC";
-        t_amount = "<a href=\"https://www.google.com/search?q=" + z.toFixed(8) + " btc+to+" + currency + "&ie=UTF-8&oe=UTF-8\" target=\"_blank\">" + t_amount + "</a>";
+        var keys = Object.keys(z);
         
         if(recal_ === false) {
-            $(".activeLoans").append("<b>Total Active Profit:</b> <span id=\"amount\">" + t_amount + "</span>");
+            if(hash === undefined)
+                $(".activeLoans").append("<b>Total Active Profit:</b><br/><div id='profitAmounts'></div>");
+
+            hash = ($(".activeLoans .date").clone().children().remove().end().text());
+            $("#profitAmounts").html = "";
+            for(var j = 0; j < keys.length; j++){
+                var i = keys[j];
+                var c = z[i];
+                var t_amount = c.toFixed(8) + " " + i;
+                t_amount = "<a href=\"https://www.google.com/search?q=" + c.toFixed(8) + " " + i.toLowerCase() + "+to+" + currency + "&ie=UTF-8&oe=UTF-8\" target=\"_blank\">" + t_amount + "</a>";
+                $("#profitAmounts").append("- <span id=\"amount_" + i + "\">" + t_amount + "</span><br/>");
+            }
         } else {
-            $('#amount').html(t_amount);
+            for(var j = 0; j < keys.length; j++){
+                var i = keys[j];
+                var c = z[i];
+                var t_amount = c.toFixed(8) + " " + i;
+                t_amount = "<a href=\"https://www.google.com/search?q=" + c.toFixed(8) + " " + i.toLowerCase() + "+to+" + currency + "&ie=UTF-8&oe=UTF-8\" target=\"_blank\">" + t_amount + "</a>";
+                $('#amount_' + i).html(t_amount);
+            }
         }
     };
 
@@ -47,11 +71,10 @@ if(typeof jQuery === 'undefined'|| !jQuery){
             window.clearInterval(intervalInt);
             codeToExecute();
         }
-    }, 500);
+    }, 4000);
     
     var recal = window.setInterval(function(){
         if(typeof jQuery !== 'undefined' && jQuery){
-            recal_ = true;
             codeToExecute();
         }
     }, 30000);
